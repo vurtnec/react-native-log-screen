@@ -1,0 +1,36 @@
+{
+  "name": "react-native-log-screen",
+  "version": "1.0.0",
+  "description": "Print log for a separate screen for React Native",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "precommit": "rm -rf dist && tsc"
+  },
+  "keywords": [
+    "log",
+    "logs",
+    "logger",
+    "react-native",
+    "file",
+    "custom",
+    "levels",
+    "console",
+    "debug"
+  ],
+  "author": "Zachary",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.165",
+    "@types/uuid": "^8.3.0",
+    "debounce": "^1.2.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "react-native": "^0.63.4",
+    "uuid": "^8.3.2"
+  }
+}
