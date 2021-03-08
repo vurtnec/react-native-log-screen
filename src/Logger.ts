@@ -116,6 +116,8 @@ class Logger {
         } else if(message instanceof String) {
             return message.toString();
         } else {
+            
+            return message.toString();
             // let dataAsString = stringify(message, null, "  "); //FYI: spaces > tabs
             // if (dataAsString && dataAsString.length > 12000) {
             //     dataAsString =
@@ -123,34 +125,62 @@ class Logger {
             //         "...(Cannot display more Logs)";
             // }
             // return dataAsString;
-            return '';
         }
     }
 
 
     private async _log(level: string, color: string, ...messages: any): Promise<void> {
 
-        this.logToConsole(level, color, messages);
+        await this.logToConsole(level, color, messages);
 
-        let formattedMessages = messages.map(async (message: string, index: number): Promise<Message> => ({
-            id: await Util.uuid(),
-            lengthAtInsertion: this.messages.length + index,
-            level,
-            message: await this.parseMessageToString(message),
-            timestamp: moment(),
-            color,
-        }));
-
+        let formattedMessages =  await this.buildFormattedMessage(level, color, ...messages)
         // if (!this.messages.length) {
         //     await this.insertAppStartMessage();
         // }
-        this.postLog(formattedMessages);
+        await this.postLog(formattedMessages);
+
+        // console.log("formatted message")
+        // console.log(formattedMessages)
+    }
+
+
+    private async buildFormattedMessage(level: string, color: string, ...messages: any): Promise<Message[]> {
+        if( typeof messages === "string" || typeof messages === "object"){
+            return await this.buildMessageObject(level, color, messages);
+        }
+
+        let formattedMessages =  await messages.map(await (async (message: string): Promise<Message> => {
+            let newId:string = await Util.uuid();
+            let parseMessage:string = await this.parseMessageToString(message);
+            return {
+                id: newId,
+                lengthAtInsertion: this.messages.length,
+                level,
+                message: parseMessage,
+                timestamp: moment(),
+                color,
+            }}))();
+            console.log("returned...")
+        return await formattedMessages;
+    }
+
+    private async buildMessageObject(level: string, color: string, ...messages: any ): Promise<Message[]>{
+        let newId:string = await Util.uuid();
+        let parseMessage:string = await this.parseMessageToString(messages);
+        return [{
+            id: newId,
+            lengthAtInsertion: this.messages.length,
+            level,
+            message: parseMessage,
+            timestamp: moment(),
+            color,
+        }];
     }
 
     private async postLog(formattedMessages: Message[]) {
-        this.messages = formattedMessages.concat(this.messages);
-        this.insertToStorage(this.messages);
-        this.emitMessageChanged(this.messages);
+        this.messages = await formattedMessages.concat(this.messages);
+        await this.insertToStorage(this.messages);
+        await this.emitMessageChanged(this.messages);
     }
 
     public async registerEmitChangedListener(listener: Function) {
@@ -164,32 +194,36 @@ class Logger {
         };
     }
 
+    public async getStorage(){
+        const storage = await this.storage.get();
+        return storage
+    }
     public async emitMessageChanged(messages: Message[]) {
         this.listeners.forEach(listener => listener(messages));
     }
 
     private async insertToStorage(formattedMessages: Message[]): Promise<void> {
-        this.storage.set(formattedMessages);
+       await this.storage.set(formattedMessages);
     }
 
     public async info(...messages: any): Promise<void> {
-        return this._log(Constant.LOG_LEVEL.INFO, Constant.COLOR.INFO, ...messages)
+        return await this._log(Constant.LOG_LEVEL.INFO, Constant.COLOR.INFO, ...messages)
     }
 
     public async debug(...messages: any): Promise<void> {
-        return this._log(Constant.LOG_LEVEL.DEBUG, Constant.COLOR.DEBUG, ...messages)
+        return await this._log(Constant.LOG_LEVEL.DEBUG, Constant.COLOR.DEBUG, ...messages)
     }
 
     public async log(...messages: any): Promise<void> {
-        return this._log(Constant.LOG_LEVEL.LOG, Constant.COLOR.LOG, ...messages)
+        return await this._log(Constant.LOG_LEVEL.LOG, Constant.COLOR.LOG, ...messages)
     }
 
     public async warn(...messages: any): Promise<void> {
-        return this._log(Constant.LOG_LEVEL.WARN, Constant.COLOR.WARN, ...messages)
+        return await this._log(Constant.LOG_LEVEL.WARN, Constant.COLOR.WARN, ...messages)
     }
 
     public async error(...messages: any): Promise<void> {
-        return this._log(Constant.LOG_LEVEL.ERROR, Constant.COLOR.ERROR, ...messages)
+        return await this._log(Constant.LOG_LEVEL.ERROR, Constant.COLOR.ERROR, ...messages)
     }
 
 }

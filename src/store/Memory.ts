@@ -18,11 +18,11 @@ class Memory extends LogStorage {
     }
 
     public async set(messages: Message[], callback?: Function) {
-        this.data = messages;
+        const newData = this.data.concat( messages);
         if(callback) {
             await callback()
         }
-        return this.data;
+        return this.data = newData;
     }
 
     public async clear(callback?: Function) {

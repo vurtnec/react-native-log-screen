@@ -1,9 +1,9 @@
 import Logger from './Logger';
 import Memory from './store/Memory';
-import Realm from './store/Realm';
+import RealmStorage from './store/RealmStorage';
 
 export default {
     Logger,
     Memory,
-    Realm
+    RealmStorage: Realm
 }

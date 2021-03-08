@@ -12,7 +12,7 @@ class Util {
         );
     }
 
-    public async uuid() {
+    public async uuid(): Promise<string> {
         return uuidv4();
     }
 
