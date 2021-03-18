@@ -1,9 +1,8 @@
-import Logger from './Logger';
-import Memory from './store/Memory';
-import RealmStorage from './store/RealmStorage';
+import LoggerFactory from './model/LoggerFactory'
+import { LOG_STORAGE_TYPE } from './Constant'
 
-export default {
-    Logger,
-    Memory,
-    RealmStorage: Realm
+export {
+  LoggerFactory,
+  LOG_STORAGE_TYPE
 }
+

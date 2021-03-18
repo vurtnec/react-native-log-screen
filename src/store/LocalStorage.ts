@@ -1,41 +1,40 @@
 import LogStorage from './LogStorage'
-import {Message} from '../Logger'
+import { Message } from '../model/Logger'
 
+class LocalStorage extends LogStorage<Message> {
+  public localStorageKey = 'appLog'
 
+  private data: Message[] = []
 
-class LocalStorage extends LogStorage {
-    public  localStorageKey:string = "appLog";
-    private data: Message[] = [];
-    
-    public constructor() {
-        super();
-      }
+  public constructor() {
+    super()
+    this.data = []
+  }
 
-    public async get(callback?: Function) {
-        if(callback){
-            await callback;
-        }
-        const datas = localStorage.getItem(this.localStorageKey) || '{}';
-        return JSON.parse(datas)
+  public async get(callback?: Function): Promise<Message[] | []> {
+    if (callback) {
+      await callback
     }
+    const data = localStorage.getItem(this.localStorageKey) || '{}'
+    return JSON.parse(data)
+  }
 
-    public async set(messages: Message[], callback?: Function) {
-        if(callback){
-            await callback;
-        }
-        const newValue:string = JSON.stringify(this.data.concat(messages));
-        localStorage.setItem(this.localStorageKey, newValue);
-        return JSON.parse(localStorage.getItem(this.localStorageKey) || '{}');
+  public async set(messages: Message[], callback?: Function): Promise<Message[] | []> {
+    if (callback) {
+      await callback
     }
+    const newValue: string = JSON.stringify(this.data.concat(messages))
+    localStorage.setItem(this.localStorageKey, newValue)
+    return JSON.parse(localStorage.getItem(this.localStorageKey) || '{}')
+  }
 
-    public async clear(callback?: Function) {
-        if(callback){
-            await callback;
-        }
-        localStorage.removeItem(this.localStorageKey);
-        this.data = [];
+  public async clear(callback?: Function): Promise<void> {
+    if (callback) {
+      await callback
     }
-
+    localStorage.removeItem(this.localStorageKey)
+    this.data = []
+  }
 }
 
-export default LocalStorage;
+export default LocalStorage

@@ -1,13 +1,15 @@
-import {Message} from '../Logger'
+import { Message } from '../model/Logger'
 
-abstract class LogStorage {
+abstract class LogStorage<T> {
 
-    abstract async get(callBack?: Function): Promise<Message[] | []>;
+  abstract async get(callBack?: Function): Promise<T[] | []>
 
-    abstract async set(messages: Message[], callBack?: Function): Promise<Message[] | []>;
+  abstract async set(
+    messages: T[],
+    callBack?: Function
+  ): Promise<T[] | []>
 
-    abstract async clear(callBack?: Function): Promise<void>;
-
+  abstract async clear(callBack?: Function): Promise<void>
 }
 
-export default LogStorage;
+export default LogStorage
