@@ -3,7 +3,6 @@ import LogStorage from '../store/LogStorage'
 import Constant, { LOG_STORAGE_TYPE } from '../Constant'
 import Memory from '../store/Memory'
 import LocalStorage from '../store/LocalStorage'
-// import RealmStorage from '../store/RealmStorage'
 
 export default class LoggerFactory {
 
@@ -17,8 +16,20 @@ export default class LoggerFactory {
     return this.createLogger()
   }
 
-  public static createLogger(options?: LoggerOptions, storage?: LOG_STORAGE_TYPE): Logger {
-    this._instance = new Logger(options, LoggerFactory.createStorage(storage))
+  static createLogger(): Logger;
+
+  static createLogger(options: LoggerOptions): Logger;
+
+  static createLogger(options: LoggerOptions, storage: LOG_STORAGE_TYPE): Logger;
+
+  static createLogger(options: LoggerOptions, storage: LogStorage<Message>): Logger;
+
+  public static createLogger(options?: LoggerOptions, storage?: LOG_STORAGE_TYPE | LogStorage<Message>): Logger {
+    if(storage instanceof LogStorage) {
+      this._instance = new Logger(options, storage)
+    }else {
+      this._instance = new Logger(options, LoggerFactory.createStorage(storage))
+    }
     return this._instance
   }
 
