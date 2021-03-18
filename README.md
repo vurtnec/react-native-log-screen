@@ -14,7 +14,7 @@
 
 
 
-**## Usage**
+# Usage
 
 1. Initial logger only once when your application init.
 
@@ -35,7 +35,7 @@
 
 4. Example
 
-   ```react
+   ```typescript
    import React, { Component } from 'react'
    import { View, Button } from 'native-base'
    import {
