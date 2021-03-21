@@ -66,7 +66,7 @@ class Logger {
         this.options.logToConsoleFunc(message, ...optionalParams)
       } else {
         const availableConsoleLogs =  Object.keys(Constant.LOG_LEVEL);
-        const consoleLogFunc = availableConsoleLogs.find(avCL => avCL === level.toLowerCase()) || Constant.LOG_LEVEL.INFO
+        const consoleLogFunc = availableConsoleLogs.find(avCL => avCL === level.toUpperCase()) || Constant.LOG_LEVEL.INFO
         switch (consoleLogFunc) {
           case Constant.LOG_LEVEL.INFO:
             console.info(message, ...optionalParams)
@@ -186,7 +186,8 @@ class Logger {
   }
 
   public async getStorage(): Promise<Message[] | []> {
-    return this.storage.get()
+    const preData =  await this.storage.get()
+    return preData
   }
 
   private async emitMessageChanged(formattedMessage: Message): Promise<void> {

@@ -3,19 +3,29 @@ import { Message } from '../model/Logger'
 
 class LocalStorage extends LogStorage<Message> {
   public localStorageKey = 'appLog'
+  private _localStorage:any; 
 
   private data: Message[] = []
 
   public constructor() {
     super()
     this.data = []
+    this._localStorage = this.queryAvailableLocalStorage()
+  }
+
+  public async queryAvailableLocalStorage(){
+    if(localStorage){
+      return localStorage
+    }else{
+        return window.localStorage
+    }
   }
 
   public async get(callback?: Function): Promise<Message[] | []> {
     if (callback) {
       await callback
     }
-    const data = localStorage.getItem(this.localStorageKey) || '{}'
+    const data = await localStorage.getItem(this.localStorageKey) || '{}'
     return JSON.parse(data)
   }
 
@@ -23,7 +33,11 @@ class LocalStorage extends LogStorage<Message> {
     if (callback) {
       await callback
     }
-    const newValue: string = JSON.stringify(this.data.concat(messages))
+    //old localStorage data
+    const oldData:Message[] = await this.get();
+    const newData = oldData.length >0? oldData.concat(messages) : messages;
+    this.data = newData;
+    const newValue: string = JSON.stringify(newData)
     localStorage.setItem(this.localStorageKey, newValue)
     return JSON.parse(localStorage.getItem(this.localStorageKey) || '{}')
   }
