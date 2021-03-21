@@ -7,16 +7,26 @@
 * Log in Memory/Storage
 
 
-
-# Required
-
-* TypeScript
-
-
-
 # Usage
 
 1. Initial logger only once when your application init.
+
+```typescript
+  public static createLogger(options?: LoggerOptions, storage?: LOG_STORAGE_TYPE): Logger {
+    this._instance = new Logger(options, LoggerFactory.createStorage(storage))
+    return this._instance
+  }
+``` 
+
+* LoggerOptions can be use to integration other log instance, please use logToConsoleFunc as logger callback.
+  
+```typescript
+     LoggerOptions {
+        logToConsole: boolean
+        logToConsoleFunc?: (message: any, ...optionalParams: any[]) => void
+    }
+```
+  Also the LOG_STORAGE_TYPE can be implements and customersized class.
 
    ```typescript
    export const logger = LoggerFactory.createLogger({
