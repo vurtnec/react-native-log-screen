@@ -47,4 +47,3 @@ E.g
 3. Example
    Please refer to LoggerPage.ts
 
-   
