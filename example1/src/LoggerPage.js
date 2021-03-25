@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {LOG_STORAGE_TYPE, LoggerFactory} from '../../../dist/index'
+import {LOG_STORAGE_TYPE, LoggerFactory} from '../../dist/index'
 
 
 export class LoggerPage extends Component {
