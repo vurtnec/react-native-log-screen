@@ -1,6 +1,6 @@
 {
   "name": "react-native-log-screen",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Print log for a separate screen for React Native",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
