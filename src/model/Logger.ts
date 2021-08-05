@@ -118,7 +118,6 @@ class Logger {
   public async clear(): Promise<void>  {
     this.messages = []
     await this.storage.clear()
-    this.logObservable = new LogObservable<Message>()
   }
 
   private async _log(
@@ -200,6 +199,7 @@ class Logger {
 
   public async unsubscribe(): Promise<void> {
     this.logObservable.unsubscribe()
+    this.logObservable = new LogObservable<Message>()
   }
 
   private async insertToStorage(formattedMessages: Message[]): Promise<void> {
