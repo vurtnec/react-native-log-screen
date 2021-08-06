@@ -8,8 +8,7 @@
     "build": "rm -rf dist && tsc",
     "precommit": "rm -rf dist && tsc --noEmit",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet --fix",
-    "start": "react-scripts start",
-    "publish": "npm publish ."
+    "start": "react-scripts start"
   },
   "keywords": [
     "log",
