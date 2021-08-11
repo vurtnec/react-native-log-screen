@@ -168,7 +168,7 @@ class Logger {
     ...optionalParams: any[]
   ): Promise<Message> {
 
-    const newId: string = await Util.uuid()
+    const newId: string = await Util.guid()
     const parseMessage: string = await this.parseMessage(message, ...optionalParams)
     return {
       id: newId,
